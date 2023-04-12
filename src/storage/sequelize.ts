@@ -83,6 +83,13 @@ type _SequelizeStorageConstructorOptions = {
 	@default false
 	*/
 	readonly timestamps?: boolean;
+
+	/**
+	Option don't attempt to sync sequelize meta table before/after every migration
+
+	@default false
+	*/
+	readonly ignoreModelSync?: boolean;
 };
 
 export type SequelizeStorageConstructorOptions =
@@ -98,6 +105,7 @@ export class SequelizeStorage implements UmzugStorage {
 	public readonly tableName?: string;
 	public readonly schema: any;
 	public readonly model: ModelClassType;
+	public readonly ignoreModelSync: boolean;
 
 	/**
 	Constructs Sequelize based storage. Migrations will be stored in a SequelizeMeta table using the given instance of Sequelize.
@@ -119,6 +127,7 @@ export class SequelizeStorage implements UmzugStorage {
 		this.tableName = options.tableName;
 		this.schema = options.schema;
 		this.model = options.model ?? this.getModel();
+		this.ignoreModelSync = options.ignoreModelSync || false
 	}
 
 	getModel(): ModelClassType {
@@ -133,7 +142,6 @@ export class SequelizeStorage implements UmzugStorage {
 				[this.columnName]: {
 					type: this.columnType,
 					allowNull: false,
-					unique: true,
 					primaryKey: true,
 					autoIncrement: false,
 				},
@@ -149,7 +157,9 @@ export class SequelizeStorage implements UmzugStorage {
 	}
 
 	protected async syncModel() {
-		await this.model.sync();
+		if (!this.ignoreModelSync) {
+			await this.model.sync();
+		}
 	}
 
 	async logMigration({ name: migrationName }: { name: string }): Promise<void> {
