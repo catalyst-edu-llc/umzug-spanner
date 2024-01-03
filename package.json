@@ -1,5 +1,5 @@
 {
-	"name": "umzug",
+	"name": "@catalyst-edu-llc/umzug",
 	"version": "3.2.1",
 	"description": "Framework-agnostic migration tool for Node",
 	"keywords": [
@@ -47,7 +47,6 @@
 		"sequelize": "6.29.0",
 		"sinon": "14.0.0",
 		"source-map-support": "0.5.21",
-		"sqlite3": "npm:@vscode/sqlite3@5.0.8",
 		"strip-ansi": "6.0.1",
 		"ts-jest": "29.0.3",
 		"ts-node": "10.9.1",
